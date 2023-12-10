@@ -1,0 +1,17 @@
+{
+  "generator-ui5-ts-app": {
+    "namespace": "zlist001",
+    "framework": "SAPUI5",
+    "frameworkVersion": "1.120.1",
+    "author": "bizhuka",
+    "initrepo": true,
+    "tstypes": "@sapui5/types",
+    "tstypesVersion": "1.120.1",
+    "appId": "zlist001",
+    "appURI": "zlist001",
+    "cdnDomain": "ui5.sap.com",
+    "defaultTheme": "sap_horizon",
+    "gte11150": true,
+    "setupCompleted": true
+  }
+}
