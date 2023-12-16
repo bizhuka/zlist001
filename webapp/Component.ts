@@ -1,6 +1,7 @@
 import UIComponent from "sap/ui/core/UIComponent";
 import models from "./model/models";
 import Device from "sap/ui/Device";
+import ErrorHandler from "./controller/ErrorHandler";
 
 /**
  * @namespace zlist001
@@ -11,22 +12,44 @@ export default class Component extends UIComponent {
 	};
 
 	private contentDensityClass: string;
+	private _oErrorHandler: ErrorHandler
 
+	/**
+	 * The component is initialized by UI5 automatically during the startup of the app and calls the init method once.
+	 * In this function, the device models are set and the router is initialized.
+	 * @override
+	*/
 	public init(): void {
 		// call the base component's init function
 		super.init();
 
+		// initialize the error handler with the component
+		this._oErrorHandler = new ErrorHandler(this);
+
 		// create the device model
 		this.setModel(models.createDeviceModel(), "device");
+
+		// set the product feedback model
+		this.setModel(models.createCommentsModel(), "productFeedback");
 
 		// create the views based on the url/hash
 		this.getRouter().initialize();
 	}
 
 	/**
+	 * The component is destroyed by UI5 automatically.
+	 * In this method, the ErrorHandler is destroyed.
+	 * @override
+	*/
+	public destroy() {
+		this._oErrorHandler.destroy();
+		// call the base component's destroy function
+		super.destroy()
+	}
+
+	/**
 	 * This method can be called to determine whether the sapUiSizeCompact or sapUiSizeCozy
 	 * design mode class should be set, which influences the size appearance of some controls.
-	 * @public
 	 * @returns css class, either 'sapUiSizeCompact' or 'sapUiSizeCozy' - or an empty string if no css class should be set
 	 */
 	public getContentDensityClass(): string {

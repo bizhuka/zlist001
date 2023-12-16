@@ -2,6 +2,6 @@
 QUnit.config.autostart = false;
 
 // import all your QUnit tests here
-void Promise.all([import("unit/controller/Main.qunit")]).then(() => {
+void Promise.all([import("unit/AllTests")]).then(() => {
 	QUnit.start();
 });

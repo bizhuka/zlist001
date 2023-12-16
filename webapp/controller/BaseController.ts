@@ -6,6 +6,8 @@ import ResourceModel from "sap/ui/model/resource/ResourceModel";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import Router from "sap/ui/core/routing/Router";
 import History from "sap/ui/core/routing/History";
+import { URLHelper } from "sap/m/library";
+import JSONModel from "sap/ui/model/json/JSONModel";
 
 /**
  * @namespace zlist001.controller
@@ -31,9 +33,9 @@ export default abstract class BaseController extends Controller {
 	 * Convenience method for getting the i18n resource bundle of the component.
 	 * @returns The i18n resource bundle of the component
 	 */
-	public getResourceBundle(): ResourceBundle | Promise<ResourceBundle> {
+	public getResourceBundle(): ResourceBundle {
 		const oModel = this.getOwnerComponent().getModel("i18n") as ResourceModel;
-		return oModel.getResourceBundle();
+		return oModel.getResourceBundle() as ResourceBundle;
 	}
 
 	/**
@@ -72,12 +74,24 @@ export default abstract class BaseController extends Controller {
 	 * It there is a history entry we go one step back in the browser history
 	 * If not, it will replace the current entry of the browser history with the main route.
 	 */
-	public onNavBack(): void {
+	public onNavBack(sRoute?: string): void {
 		const sPreviousHash = History.getInstance().getPreviousHash();
 		if (sPreviousHash !== undefined) {
 			window.history.go(-1);
 		} else {
-			this.getRouter().navTo("main", {}, undefined, true);
+			this.getRouter().navTo(sRoute ? sRoute : "worklist", {}, undefined, true);
 		}
+	}
+
+	/**
+	 * Event handler when the share by E-Mail button has been clicked
+	*/
+	public onShareEmailPress() {
+		const oViewModel = (this.getModel("objectView") || this.getModel("worklistView")) as JSONModel;
+		URLHelper.triggerEmail(
+			null,
+			oViewModel.getProperty("/shareSendEmailSubject") as string,
+			oViewModel.getProperty("/shareSendEmailMessage") as string
+		);
 	}
 }
